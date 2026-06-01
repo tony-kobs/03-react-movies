@@ -1,18 +1,37 @@
 import { useState } from "react";
-import "./App.css";
+import { toast } from "react-hot-toast";
+
+import SearchBar from "./components/SearchBar/SearchBar";
+import { fetchMovies } from "./services/movieService";
+import type { Movie } from "./types/movie";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [movies, setMovies] = useState<Movie[]>([]);
+
+  const handleSearch = async (query: string) => {
+    try {
+      setMovies([]);
+
+      const data = await fetchMovies(query);
+
+      if (data.length === 0) {
+        toast.error("No movies found for your request.");
+        return;
+      }
+
+      setMovies(data);
+    } catch (error) {
+      toast.error("Something went wrong.");
+      console.error(error);
+    }
+  };
 
   return (
-    <div className="App">
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button type="button" onClick={() => setCount((count) => count + 1)}>
-          Count is {count}
-        </button>
-      </div>
-    </div>
+    <>
+      <SearchBar onSubmit={handleSearch} />
+
+      {/* MovieGrid тут */}
+    </>
   );
 }
 
