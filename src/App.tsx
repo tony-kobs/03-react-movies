@@ -29,6 +29,7 @@ function App() {
   return (
     <>
       <SearchBar onSubmit={handleSearch} />
+      {movies.length > 0 && <p>Found {movies.length} movies</p>}
 
       {/* MovieGrid тут */}
     </>
