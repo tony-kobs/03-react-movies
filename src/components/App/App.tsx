@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 
-import SearchBar from "./components/SearchBar/SearchBar";
-import { fetchMovies } from "./services/movieService";
-import type { Movie } from "./types/movie";
-import MovieGrid from "./components/MovieGrid/MovieGrid";
-import Loader from "./components/Loader/Loader";
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-import MovieModal from "./components/MovieModal/MovieModal";
+import SearchBar from "../SearchBar/SearchBar";
+import { fetchMovies } from "../../services/movieService";
+import type { Movie } from "../../types/movie";
+import MovieGrid from "../MovieGrid/MovieGrid";
+import Loader from "../Loader/Loader";
+import ErrorMessage from "../ErrorMessage/ErrorMessage";
+import MovieModal from "../MovieModal/MovieModal";
+import css from "./App.module.css";
 
 function App() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -46,15 +47,17 @@ function App() {
   };
 
   return (
-    <>
+    <div className={css.app}>
       <SearchBar onSubmit={handleSearch} />
       {loading && <Loader />}
       {error && <ErrorMessage />}
-      <MovieGrid movies={movies} onMovieSelect={openModal} />
+      {!loading && !error && movies.length > 0 && (
+        <MovieGrid movies={movies} onMovieSelect={openModal} />
+      )}
       {selectedMovie && (
         <MovieModal movie={selectedMovie} onClose={closeModal} />
       )}
-    </>
+    </div>
   );
 }
 
